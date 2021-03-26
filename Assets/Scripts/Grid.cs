@@ -5,29 +5,28 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour
 {
-    int gridSize = 3;
+    public int gridSize = 3;
     public int scale;
     Dictionary<Vector3Int, Cell> cells = new Dictionary<Vector3Int, Cell>();
     public GameObject block;
     public GameObject colliderBlock;
 
+    public List<GameObject> prefabs = new List<GameObject>();
+
     void Start()
     {
-
-        //CreateCells();
-        // CreateCubes();
         CreateGround();
     }
 
-    private void FixedUpdate()
-    {
-        Vector3 a = this.transform.position;
+    //private void FixedUpdate()
+    //{
+    //    Vector3 a = this.transform.position;
 
-        Vector3 b = new Vector3(Mathf.Floor(a.x), Mathf.Floor(a.y), Mathf.Floor(a.z));
+    //    Vector3 b = new Vector3(Mathf.Floor(a.x), Mathf.Floor(a.y), Mathf.Floor(a.z));
 
-        //this is the gameobject
-        this.transform.position = b;
-    }
+    //    //this is the gameobject
+    //    this.transform.position = b;
+    //}
 
 
     private void CreateGround()
@@ -45,7 +44,7 @@ public class Grid : MonoBehaviour
                 plane.transform.localScale *= scale;
                 Vector3Int intVector = Vector3Int.FloorToInt(plane.transform.position) / scale;
                 plane.name = intVector.ToString();
-                cells.Add(intVector, new Cell(intVector,scale));
+                cells.Add(intVector, new Cell(intVector, scale, true));
                 plane.transform.parent = ground.transform;
             }
         }
@@ -57,11 +56,13 @@ public class Grid : MonoBehaviour
         {
             return;
         }
-        Cell cellObject = new Cell(position,scale);
-        cells.Add(position, cellObject);
 
-        CreateCube(position);
-        AddPossibleNeigbours();
+
+        Cell cellObject = new Cell(position, scale, false);
+        cellObject.prefabs = prefabs;
+        cellObject.SetCellBlockLocations();
+        cells.Add(position, cellObject);
+        UpdateAllBlocks();
     }
 
     public void DestroyCell(Vector3Int position)
@@ -72,8 +73,7 @@ public class Grid : MonoBehaviour
         }
         cells.Remove(position);
         DestroyCube(position);
-        AddPossibleNeigbours();
-
+        UpdateAllBlocks();
     }
 
     private void DestroyCube(Vector3Int position)
@@ -83,23 +83,27 @@ public class Grid : MonoBehaviour
 
     private void CreateCube(Vector3Int position)
     {
+        DestroyCube(position);
         GameObject cube = Instantiate(colliderBlock);
-        cube.transform.position = position*scale;
+        cube.transform.position = position * scale;
         cube.name = position.ToString();
         cube.transform.localScale *= scale;
-
         cube.transform.parent = this.transform;
-        cells[position].SetCellBlockLocations();
+
+
         for (int i = 0; i < cells[position].cellBlocks.Length; i++)
         {
-            GameObject cubeBlock = Instantiate(block);
+            GameObject cubeBlock = Instantiate(cells[position].cellBlocks[i].prefab);
             cubeBlock.transform.parent = cube.transform;
-            cubeBlock.transform.localScale *= scale*.5f;
+            cubeBlock.transform.localScale *= scale * .5f;
             cubeBlock.transform.localPosition = cells[position].cellBlocks[i].position;
+            cubeBlock.transform.eulerAngles = cells[position].cellBlocks[i].orientation;
             cubeBlock.name = "CubeBlock: " + i + " xyz: " + cells[position].cellBlocks[i].position;
         }
     }
-
+    /// <summary>
+    /// 
+    /// </summary>
     public void AddPossibleNeigbours()
     {
         foreach (KeyValuePair<Vector3Int, Cell> entry in cells)
@@ -109,7 +113,7 @@ public class Grid : MonoBehaviour
             int z = (int)entry.Key.z;
 
             Cell[] neighbours = new Cell[6];
-            neighbours[0] = cells.ContainsKey(new Vector3Int(x + 1, y, z)) ? cells[new Vector3Int(x + 1, y, z)]: null;
+            neighbours[0] = cells.ContainsKey(new Vector3Int(x + 1, y, z)) ? cells[new Vector3Int(x + 1, y, z)] : null;
             neighbours[1] = cells.ContainsKey(new Vector3Int(x - 1, y, z)) ? cells[new Vector3Int(x - 1, y, z)] : null;
             neighbours[2] = cells.ContainsKey(new Vector3Int(x, y + 1, z)) ? cells[new Vector3Int(x, y + 1, z)] : null;
             neighbours[3] = cells.ContainsKey(new Vector3Int(x, y - 1, z)) ? cells[new Vector3Int(x, y - 1, z)] : null;
@@ -118,27 +122,21 @@ public class Grid : MonoBehaviour
 
             entry.Value.neighbours = neighbours;
             entry.Value.CalculateConfiguration();
-            if(entry.Value.coordinate == new Vector3Int(0, 1, 0))
+            if (entry.Value.coordinate == new Vector3Int(0, 1, 0))
             {
                 Debug.Log(entry.Value.neighbourConfigurationNumber);
             }
         }
-        //ReturnAllNeighbours();
     }
-
-    private void ReturnAllNeighbours()
+    public void UpdateAllBlocks()
     {
+        AddPossibleNeigbours();
         foreach (KeyValuePair<Vector3Int, Cell> entry in cells)
         {
-            if (entry.Key == new Vector3Int(0, 1, 0))
+            if (!entry.Value.isGround)
             {
-                for (int i = 0; i < entry.Value.neighbours.Length; i++)
-                {
-                    if (entry.Value.neighbours[i] != null)
-                    {
-                        Debug.Log("Cell: " + entry.Key + " N " + i + ": " + entry.Value.neighbours[i].coordinate);
-                    }
-                }
+                entry.Value.SetCellBlockPrefabs();
+                CreateCube(entry.Key);
             }
         }
     }

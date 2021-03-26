@@ -20,11 +20,11 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
-  m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
-  m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
+  m_AmbientSkyColor: {r: 0.5235849, g: 0.68239003, b: 1, a: 1}
+  m_AmbientEquatorColor: {r: 0, g: 0.44150934, b: 0.735849, a: 1}
+  m_AmbientGroundColor: {r: 0.01601993, g: 0.12813187, b: 0.3773585, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 1
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
   m_HaloStrength: 0.5
@@ -243,6 +243,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridObject: {fileID: 1743139462}
+  moveCameraScript: {fileID: 963194229}
 --- !u!4 &899994498
 Transform:
   m_ObjectHideFlags: 0
@@ -268,6 +269,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194227}
   - component: {fileID: 963194226}
+  - component: {fileID: 963194229}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -333,13 +335,26 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.051815186, y: -0.9481188, z: 0.22930834, w: 0.21401782}
-  m_LocalPosition: {x: 6.4214864, y: 8.028982, z: 11.428283}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2, y: 12, z: 12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &963194229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8d41943f7ec3f74da6cc78da55771d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grid: {fileID: 1743139463}
 --- !u!1 &1743139462
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,10 +384,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb21480eed031840a3b8c791e9718cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gridSize: 3
   scale: 2
   block: {fileID: 8543444685145257255, guid: 31d321f9fdf11d949a8db46f1276347e, type: 3}
   colliderBlock: {fileID: 7420555786784407609, guid: b3874f5774ced8c4fa071b84001f8e31,
     type: 3}
+  prefabs:
+  - {fileID: 8232164524522123751, guid: 2ed9ab07d917e0847a857f95fc22f6e9, type: 3}
+  - {fileID: 8416386870150858435, guid: 25c7ddd3c7cdefa428799e75f2d25151, type: 3}
+  - {fileID: 8458969621401027328, guid: 4acb4caae97ef4a488d85edd09d72b2d, type: 3}
+  - {fileID: 4507497546856298426, guid: ddfbe5451db74384e993fd6bfad3f42f, type: 3}
+  - {fileID: 6374911891867253577, guid: 4ba837b77d619a249a343bfd63f190d3, type: 3}
+  - {fileID: 3027285002135460289, guid: 3e1e215a903132341824fee120cd1268, type: 3}
+  - {fileID: 7788217093852497234, guid: 9f517e7b17296b140adca5494b3701c7, type: 3}
+  - {fileID: 2190354815460352886, guid: 7d94284ad3c09dc419ba6ba80b99ec78, type: 3}
+  - {fileID: 8543444685145257255, guid: 31d321f9fdf11d949a8db46f1276347e, type: 3}
 --- !u!4 &1743139464
 Transform:
   m_ObjectHideFlags: 0

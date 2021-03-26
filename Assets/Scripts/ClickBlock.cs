@@ -7,6 +7,8 @@ public class ClickBlock : MonoBehaviour
     Grid grid;
     public GameObject gridObject;
 
+    public MoveCamera moveCameraScript;
+
     RaycastHit hitInfo;
     // Start is called before the first frame update
     void Start()
@@ -20,31 +22,37 @@ public class ClickBlock : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
-            if (hit)
-            {
-
-                Vector3 position = new Vector3(Mathf.Round(hitInfo.collider.transform.position.x),
-                                                Mathf.Round(hitInfo.collider.transform.position.y),
-                                                Mathf.Round(hitInfo.collider.transform.position.z)) + hitInfo.normal * grid.scale;
-                Vector3Int worldPosition = Vector3Int.FloorToInt(position);
-                grid.CreateCell(worldPosition / grid.scale);
-                Debug.Log(worldPosition / grid.scale);
-            }
+            RemoveOrAddBlocks(true);
         }
         if (Input.GetMouseButtonDown(1))
         {
-            bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
-            if (hit)
-            {
-                //Debug.Log("clicked"+hitInfo.collider.transform.position);
+            RemoveOrAddBlocks(false);
+        }
+    }
 
-                Vector3 position = new Vector3(Mathf.Round(hitInfo.collider.transform.position.x),
-                                                Mathf.Round(hitInfo.collider.transform.position.y),
-                                                Mathf.Round(hitInfo.collider.transform.position.z));
-                Vector3Int intPosition = Vector3Int.FloorToInt(position);
-                grid.DestroyCell(intPosition / grid.scale);
+    void RemoveOrAddBlocks(bool createOrDestroy)
+    {
+        bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
+        if (hit)
+        {
+            Vector3 position = new Vector3(Mathf.Round(hitInfo.collider.transform.position.x),
+                                            Mathf.Round(hitInfo.collider.transform.position.y),
+                                            Mathf.Round(hitInfo.collider.transform.position.z));
+
+            if (createOrDestroy)
+            {
+                position += hitInfo.normal * grid.scale;
+                grid.CreateCell(Vector3Int.FloorToInt(position) / grid.scale);
+                
             }
+            else
+            {
+                grid.DestroyCell(Vector3Int.FloorToInt(position) / grid.scale);
+            }
+        }
+        else
+        {
+            moveCameraScript.StartRotate();
         }
     }
 }
