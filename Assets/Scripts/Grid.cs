@@ -8,8 +8,9 @@ public class Grid : MonoBehaviour
     public int gridSize = 3;
     public int scale;
     Dictionary<Vector3Int, Cell> cells = new Dictionary<Vector3Int, Cell>();
-    public GameObject block;
+    List<Vector3Int> groundCells = new List<Vector3Int>();
     public GameObject colliderBlock;
+
 
     public List<GameObject> prefabs = new List<GameObject>();
 
@@ -45,6 +46,7 @@ public class Grid : MonoBehaviour
                 Vector3Int intVector = Vector3Int.FloorToInt(plane.transform.position) / scale;
                 plane.name = intVector.ToString();
                 cells.Add(intVector, new Cell(intVector, scale, true));
+                groundCells.Add(intVector);
                 plane.transform.parent = ground.transform;
             }
         }
@@ -52,7 +54,12 @@ public class Grid : MonoBehaviour
 
     public void CreateCell(Vector3Int position)
     {
-        if (cells.ContainsKey(position))
+        Debug.Log(position);
+        if (cells.ContainsKey(position) ||
+            position.x > gridSize ||
+            position.z > gridSize ||
+            position.x < -1 ||
+            position.z < -1)
         {
             return;
         }
@@ -67,7 +74,7 @@ public class Grid : MonoBehaviour
 
     public void DestroyCell(Vector3Int position)
     {
-        if (!cells.ContainsKey(position))
+        if (!cells.ContainsKey(position) || groundCells.Contains(position))
         {
             return;
         }
@@ -122,10 +129,6 @@ public class Grid : MonoBehaviour
 
             entry.Value.neighbours = neighbours;
             entry.Value.CalculateConfiguration();
-            if (entry.Value.coordinate == new Vector3Int(0, 1, 0))
-            {
-                Debug.Log(entry.Value.neighbourConfigurationNumber);
-            }
         }
     }
     public void UpdateAllBlocks()
