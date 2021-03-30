@@ -23,19 +23,15 @@ class Cell
 
     public void SetCellBlockLocations()
     {
-        Vector3Int cPos = coordinate;
-        float pos = 0.5f;
         float offset = 0.25f;
-
-
-        cellBlocks[0] = new Cellblock(new Vector3(-offset, -offset, -offset), new Vector3(0, 180, 180));                  //South West Down 2,32,8
-        cellBlocks[1] = new Cellblock(new Vector3(pos - offset, -offset, -offset), new Vector3(0, 90, 180));             //North West Down 1,32,8
-        cellBlocks[2] = new Cellblock(new Vector3(-offset, -offset, pos - offset), new Vector3(0, -90, 180));             //South East Down 2,16,8
-        cellBlocks[3] = new Cellblock(new Vector3(pos - offset, -offset, pos - offset), new Vector3(0, 0, 180));        //North East Down 1,16,8
-        cellBlocks[4] = new Cellblock(new Vector3(-offset, pos - offset, -offset), new Vector3(0, -90, 0));             //South West Up   2,32,4
-        cellBlocks[5] = new Cellblock(new Vector3(pos - offset, pos - offset, -offset), new Vector3(0, 180, 0));        //North West Up   1,32,4
-        cellBlocks[6] = new Cellblock(new Vector3(-offset, pos - offset, pos - offset), new Vector3(0, 0, 0));        //South East Up   2,16,4
-        cellBlocks[7] = new Cellblock(new Vector3(pos - offset, pos - offset, pos - offset), new Vector3(0, 90, 0));   //North East Up   1,16,4
+        cellBlocks[0] = new Cellblock(new Vector3(-offset,  -offset,    -offset),   new Vector3(0, 180, 180));
+        cellBlocks[1] = new Cellblock(new Vector3(offset,   -offset,    -offset),   new Vector3(0, 90,  180));
+        cellBlocks[2] = new Cellblock(new Vector3(-offset,  -offset,    offset),    new Vector3(0, -90, 180));
+        cellBlocks[3] = new Cellblock(new Vector3(offset,   -offset,    offset),    new Vector3(0, 0,   180));
+        cellBlocks[4] = new Cellblock(new Vector3(-offset,  offset,     -offset),   new Vector3(0, -90, 0));
+        cellBlocks[5] = new Cellblock(new Vector3(offset,   offset,     -offset),   new Vector3(0, 180, 0)); 
+        cellBlocks[6] = new Cellblock(new Vector3(-offset,  offset,     offset),    new Vector3(0, 0,   0));
+        cellBlocks[7] = new Cellblock(new Vector3(offset,   offset,     offset),    new Vector3(0, 90,  0));
     }
 
     public void CalculateConfiguration()

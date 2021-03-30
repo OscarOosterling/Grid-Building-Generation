@@ -29,8 +29,8 @@ public class MoveCamera : MonoBehaviour
     void Start()
     {
         middlePoint = CalculateMiddlePoint();
-        SetPositions();
-        SetRotations();
+        SetCameraPosition();
+        SetCameraRotation();
         currentKey = 0;
         gameObject.transform.position = positions[currentKey];
         gameObject.transform.rotation = rotations[currentKey];
@@ -40,19 +40,19 @@ public class MoveCamera : MonoBehaviour
         nextRotation = rotations[currentKey];
     }
 
-    private void SetRotations()
+    private void SetCameraRotation()
     {
         for (int i = 0; i < AmountOfAngles; i++)
         {
-            int x = startYAngle - (rotationAmount * i);
-            rotations.Add(i, Quaternion.Euler(xAngle,x,zAngle));
+            int y = startYAngle - (rotationAmount * i);
+            rotations.Add(i, Quaternion.Euler(xAngle,y,zAngle));
         }
     }
 
-    private void SetPositions()
-    {
-        float y = middlePoint.y + (grid.gridSize * 2) * grid.scale;
+    private void SetCameraPosition()
+    {   
         float offset = (grid.gridSize * 2) * grid.scale;
+        float y = middlePoint.y + offset;
 
         positions = new Dictionary<int, Vector3>()
         {
@@ -85,17 +85,22 @@ public class MoveCamera : MonoBehaviour
     {
         if (isLerping)
         {
-            float timeSinceStarted = Time.time - startLerpTime;
-            float percentageComplete = timeSinceStarted / lerpTime;
+            Lerp();
 
-            transform.position = Vector3.Lerp(currentPosition, nextPosition, percentageComplete);
-            transform.rotation = Quaternion.Lerp(currentRotation, nextRotation, percentageComplete);
+        }
+    }
 
-            if (percentageComplete >= 1.0f)
-            {
-                isLerping = false;
-            }
+    private void Lerp()
+    {
+        float timeSinceStarted = Time.time - startLerpTime;
+        float percentageComplete = timeSinceStarted / lerpTime;
 
+        transform.position = Vector3.Lerp(currentPosition, nextPosition, percentageComplete);
+        transform.rotation = Quaternion.Lerp(currentRotation, nextRotation, percentageComplete);
+        
+        if (percentageComplete >= 1.0f)
+        {
+            isLerping = false;
         }
     }
 

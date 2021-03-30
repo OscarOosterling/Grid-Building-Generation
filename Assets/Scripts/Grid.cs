@@ -10,26 +10,12 @@ public class Grid : MonoBehaviour
     Dictionary<Vector3Int, Cell> cells = new Dictionary<Vector3Int, Cell>();
     List<Vector3Int> groundCells = new List<Vector3Int>();
     public GameObject colliderBlock;
-
-
     public List<GameObject> prefabs = new List<GameObject>();
 
     void Start()
     {
         CreateGround();
     }
-
-    //private void FixedUpdate()
-    //{
-    //    Vector3 a = this.transform.position;
-
-    //    Vector3 b = new Vector3(Mathf.Floor(a.x), Mathf.Floor(a.y), Mathf.Floor(a.z));
-
-    //    //this is the gameobject
-    //    this.transform.position = b;
-    //}
-
-
     private void CreateGround()
     {
         GameObject ground = new GameObject();
@@ -54,7 +40,6 @@ public class Grid : MonoBehaviour
 
     public void CreateCell(Vector3Int position)
     {
-        Debug.Log(position);
         if (cells.ContainsKey(position) ||
             position.x > gridSize ||
             position.z > gridSize ||
@@ -63,8 +48,6 @@ public class Grid : MonoBehaviour
         {
             return;
         }
-
-
         Cell cellObject = new Cell(position, scale, false);
         cellObject.prefabs = prefabs;
         cellObject.SetCellBlockLocations();

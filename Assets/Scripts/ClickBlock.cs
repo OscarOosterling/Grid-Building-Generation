@@ -71,15 +71,13 @@ public class ClickBlock : MonoBehaviour
         bool hit = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hitInfo);
         if (hit)
         {
-            Vector3 position = new Vector3(Mathf.Round(hitInfo.collider.transform.position.x),
+            Vector3 position = new Vector3( Mathf.Round(hitInfo.collider.transform.position.x),
                                             Mathf.Round(hitInfo.collider.transform.position.y),
                                             Mathf.Round(hitInfo.collider.transform.position.z));
-
             if (createOrDestroy)
             {
                 position += hitInfo.normal * grid.scale;
-                grid.CreateCell(Vector3Int.FloorToInt(position) / grid.scale);
-                
+                grid.CreateCell(Vector3Int.FloorToInt(position) / grid.scale);  
             }
             else
             {
